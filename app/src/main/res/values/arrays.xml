@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="home_menu">
+        <item>Puskesmas</item>
+        <item>Ambulan</item>
+        <item>Rumah sakit Khusus</item>
+        <item>Rumah Sakit Umum</item>
+        <item>Pemadam Kebakaran</item>
+        <item>Tempat Pembuangan Sampah</item>
+    </string-array>
+
+    <integer-array name="home_icon">
+        <item>@drawable/puskesmas</item>
+        <item>@drawable/Ambulance</item>
+        <item>@drawable/spesialist</item>
+        <item>@drawable/public_hospital</item>
+        <item>@drawable/Fireman</item>
+        <item>@drawable/trash</item>
+    </integer-array>
+
+</resources>
