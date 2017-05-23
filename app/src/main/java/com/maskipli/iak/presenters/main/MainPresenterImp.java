@@ -1,8 +1,9 @@
 package com.maskipli.iak.presenters.main;
 
-import com.maskipli.iak.models.beans.Puskesmas;
+import com.maskipli.iak.models.beans.Source;
 import com.maskipli.iak.utils.network.NetworkService;
 import com.maskipli.iak.views.main.MainView;
+import com.maskipli.iak.views.redaction.RedactionActivity;
 
 import rx.Observable;
 
@@ -11,7 +12,7 @@ import rx.Observable;
  * @since 5/21/17.
  */
 
-public class MainPresenterImp implements MainPresenter {
+public class MainPresenterImp implements MainPresenter{
 
     MainView mainView;
     NetworkService service;
@@ -21,10 +22,16 @@ public class MainPresenterImp implements MainPresenter {
         this.service = service;
     }
 
+    @SuppressWarnings("unchecked")
+    @Override
+    public Observable<Source> loadDataSource() {
+        return (Observable<Source>) service
+                .getPreparedObservable(service.getApi().getAllSource(), Source.class, true, true);
+    }
 
     @Override
-    public Observable<Puskesmas> loadDataPuskesmas() {
-        return (Observable<Puskesmas>) service
-                .getPreparedObservable(service.getApi().getPuskesmas(), Puskesmas.class, true, true);
+    public void setOnGridClicked(String data) {
+        mainView.intentInto(RedactionActivity.class, data);
     }
+
 }

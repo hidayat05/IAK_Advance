@@ -1,14 +1,11 @@
 package com.maskipli.iak.utils.network;
 
+import android.util.Log;
 import android.util.LruCache;
 
 import com.maskipli.iak.BuildConfig;
-import com.maskipli.iak.models.beans.Ambulan;
-import com.maskipli.iak.models.beans.Damkar;
-import com.maskipli.iak.models.beans.Puskesmas;
-import com.maskipli.iak.models.beans.RumahSakitKhusus;
-import com.maskipli.iak.models.beans.RumahSakitUmum;
-import com.maskipli.iak.models.beans.Tps;
+import com.maskipli.iak.models.beans.Redaction;
+import com.maskipli.iak.models.beans.Source;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -16,7 +13,7 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.GET;
-import retrofit2.http.Path;
+import retrofit2.http.Query;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -50,8 +47,8 @@ public class NetworkService {
             Request request = chain.request()
                     .newBuilder()
                     .addHeader("Accept", "application/json")
-                    .addHeader("Authorization", BuildConfig.API_KEY)
                     .build();
+            Log.e("url request", request.url().toString());
             return chain.proceed(request);
         });
         return builder.build();
@@ -84,26 +81,17 @@ public class NetworkService {
 
     public interface NetworkApi {
 
-        @GET("rumahsakitumum")
-        Observable<RumahSakitUmum> getRumahSakitUmum();
+        @GET("sources")
+        Observable<Source> getAllSource();
 
-        @GET("rumahsakitkhusus")
-        Observable<RumahSakitKhusus> getRumahSakitKhusus();
+        @GET("articles")
+        Observable<Redaction> getNewsFromSource(@Query("source") String source,
+                                                @Query("apiKey") String key);
 
-        @GET("puskesmas")
-        Observable<Puskesmas> getPuskesmas();
-
-        @GET("emergency/petugaspemadam")
-        Observable<Damkar> getDamkar();
-
-        @GET("emergency/ambulance")
-        Observable<Ambulan> getAmbulan();
-
-        @GET("tps")
-        Observable<Tps> getTps();
-
-        @GET("tps?page={page}")
-        Observable<Tps> getTpsPage(@Path("page") int page);
+        @GET("articles")
+        Observable<Redaction> getNewsSourceSort(@Query("source") String source,
+                                                @Query("sort") String sortBy,
+                                                @Query("apiKey") String key);
     }
 }
 

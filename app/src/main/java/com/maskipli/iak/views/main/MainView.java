@@ -7,4 +7,8 @@ package com.maskipli.iak.views.main;
 
 public interface MainView {
     void viewData();
+
+    void setToast();
+
+    void intentInto(Class activity, String stringExtra);
 }

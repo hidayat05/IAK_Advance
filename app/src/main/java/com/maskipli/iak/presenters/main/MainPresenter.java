@@ -1,6 +1,6 @@
 package com.maskipli.iak.presenters.main;
 
-import com.maskipli.iak.models.beans.Puskesmas;
+import com.maskipli.iak.models.beans.Source;
 
 import rx.Observable;
 
@@ -10,5 +10,7 @@ import rx.Observable;
  */
 
 public interface MainPresenter {
-    Observable<Puskesmas> loadDataPuskesmas();
+    Observable<Source> loadDataSource();
+
+    void setOnGridClicked(String data);
 }

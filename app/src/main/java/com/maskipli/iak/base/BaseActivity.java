@@ -1,10 +1,11 @@
 package com.maskipli.iak.base;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 
 import butterknife.ButterKnife;
 import rx.Subscription;
-import rx.subscriptions.CompositeSubscription;
 
 /**
  * @author hidayat
@@ -13,8 +14,7 @@ import rx.subscriptions.CompositeSubscription;
 
 public class BaseActivity extends AppCompatActivity{
 
-    protected Subscription subscriber = new CompositeSubscription();
-
+    Subscription subscription;
     protected void bind(int layout) {
         setContentView(layout);
         ButterKnife.bind(this);
@@ -23,8 +23,36 @@ public class BaseActivity extends AppCompatActivity{
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (subscriber != null) {
-            subscriber.unsubscribe();
+        if (subscription != null) {
+            subscription.unsubscribe();
         }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (subscription != null) {
+            subscription.unsubscribe();
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void setSubscription(Subscription subscription) {
+        this.subscription = subscription;
+    }
+
+    public void intentInto(Class activity, String stringExtra) {
+        Intent intent = new Intent(this, activity);
+        intent.putExtra("data", stringExtra);
+        startActivity(intent);
     }
 }
