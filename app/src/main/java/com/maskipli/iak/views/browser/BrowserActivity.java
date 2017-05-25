@@ -30,10 +30,11 @@ public class BrowserActivity extends BaseActivity implements BrowserView {
         super.onCreate(savedInstanceState);
         bind(R.layout.activity_browser);
         ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null)
-            actionBar.setDisplayHomeAsUpEnabled(true);
         String url = getIntent().getStringExtra("data");
-        actionBar.setTitle(url);
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setTitle(url);
+        }
         presenter = new BrowserPresenterImp(this);
         presenter.viewWebData(webView, url);
     }

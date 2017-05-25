@@ -3,7 +3,6 @@ package com.maskipli.iak.views.redaction;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 
 import com.bumptech.glide.Glide;
 import com.maskipli.iak.Apps;
@@ -33,6 +32,11 @@ public class RedactionActivity extends BaseActivity implements RedactionView {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         bind(R.layout.activity_redaction);
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setTitle(getIntent().getStringExtra("name"));
+        }
         NetworkService service = ((Apps) getApplication()).getNetworkService();
         redactionPresenter = new RedactionPresenterImp(this, service);
         subscription = redactionPresenter.getDataRedaction()
@@ -40,7 +44,6 @@ public class RedactionActivity extends BaseActivity implements RedactionView {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onLoadSuccess, this::onLoadFailed);
         setSubscription(subscription);
-        Log.e("MASKIPS", bundleData());
     }
 
     @Override
@@ -48,32 +51,36 @@ public class RedactionActivity extends BaseActivity implements RedactionView {
         return getIntent().getStringExtra("data");
     }
 
+
     @Override
     public void onLoadSuccess(Redaction result) {
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         GenericAdapter adapter = new GenericAdapter<Redaction.Articles, ArticelHolder>
-                        (R.layout.layout_item_articel,
+                (R.layout.layout_item_articel,
                         ArticelHolder.class,
-                        Redaction.Articles.class,
                         result.getArticles()) {
             @Override
             protected void bindView(ArticelHolder holder, Redaction.Articles model, int position) {
                 holder.bind(model);
-                Glide.with(RedactionActivity.this)
-                        .load(model.urlToImage)
-                        .into(holder.getImagePoster());
-                holder.getBtnOpenOnWeb().setOnClickListener(v -> {
-                    redactionPresenter.onClickList(model);
-                });
+                loadImageIntoGlide(holder, model);
             }
         };
         recyclerView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
     }
 
     @Override
     public void onLoadFailed(Throwable throwable) {
-            subscription.unsubscribe();
+        subscription.unsubscribe();
     }
 
+    private void loadImageIntoGlide(ArticelHolder holder, Redaction.Articles model) {
+        Glide.with(this)
+                .load(model.urlToImage)
+                .into(holder.getImagePoster());
+        holder.getItem_card().setOnClickListener(v -> {
+            redactionPresenter.onClickList(model);
+        });
+    }
 
 }

@@ -30,8 +30,8 @@ public class MainPresenterImp implements MainPresenter{
     }
 
     @Override
-    public void setOnGridClicked(String data) {
-        mainView.intentInto(RedactionActivity.class, data);
+    public void setOnGridClicked(String data, String name) {
+        mainView.intentInto(RedactionActivity.class, data, name);
     }
 
 }

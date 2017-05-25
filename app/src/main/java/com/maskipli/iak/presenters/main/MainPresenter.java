@@ -10,7 +10,8 @@ import rx.Observable;
  */
 
 public interface MainPresenter {
+
     Observable<Source> loadDataSource();
 
-    void setOnGridClicked(String data);
+    void setOnGridClicked(String data, String name);
 }

@@ -17,13 +17,11 @@ public abstract class GenericAdapter <T, VH extends RecyclerView.ViewHolder> ext
 
     private int mLayout;
     private Class<VH> mViewHolderClass;
-    private Class<T> mModelClass;
     private ArrayList<T> mData;
 
-    public GenericAdapter(int mLayout, Class<VH> mViewHolderClass, Class<T> mModelClass, ArrayList<T> mData) {
+    public GenericAdapter(int mLayout, Class<VH> mViewHolderClass, ArrayList<T> mData) {
         this.mLayout = mLayout;
         this.mViewHolderClass = mViewHolderClass;
-        this.mModelClass = mModelClass;
         this.mData = mData;
     }
 

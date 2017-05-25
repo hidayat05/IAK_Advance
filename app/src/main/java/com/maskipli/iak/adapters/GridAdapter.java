@@ -55,7 +55,9 @@ public class GridAdapter extends BaseAdapter {
             gridView = convertView;
         }
         ((TextView) gridView.findViewById(R.id.tv_menu)).setText(data.name);
-        gridView.findViewById(R.id.ll_grid_item).setOnClickListener(v -> mainPresenter.setOnGridClicked(listSource.get(position).id));
+        gridView.findViewById(R.id.ll_grid_item).setOnClickListener
+                (v -> mainPresenter.setOnGridClicked(listSource.get(position).id,
+                        listSource.get(position).name));
         return gridView;
     }
 }

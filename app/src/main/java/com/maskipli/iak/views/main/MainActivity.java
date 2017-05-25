@@ -1,8 +1,8 @@
 package com.maskipli.iak.views.main;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.GridView;
-import android.widget.Toast;
 
 import com.maskipli.iak.Apps;
 import com.maskipli.iak.R;
@@ -17,7 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import rx.Observer;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 public class MainActivity extends BaseActivity implements MainView {
 
@@ -34,34 +35,20 @@ public class MainActivity extends BaseActivity implements MainView {
         bind(R.layout.activity_main);
         service = ((Apps) getApplication()).getNetworkService();
         mainPresenter = new MainPresenterImp(this, service);
-        mainPresenter.loadDataSource().subscribe(new Observer<Source>() {
-            @Override
-            public void onCompleted() {
-
-            }
-
-            @Override
-            public void onError(Throwable e) {
-
-            }
-
-            @Override
-            public void onNext(Source source) {
-                gridMenu.setAdapter(new GridAdapter(MainActivity.this, mainPresenter, source.sources));
-            }
-        });
+        mainPresenter.loadDataSource()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::onSuccessLoad, this::onErrorLoad);
     }
 
 
     @Override
-    public void viewData() {
-
+    public void onSuccessLoad(Source result) {
+        gridMenu.setAdapter(new GridAdapter(MainActivity.this, mainPresenter, result.sources));
     }
-
 
     @Override
-    public void setToast() {
-        Toast.makeText(this, "bener ini ambulance", Toast.LENGTH_SHORT).show();
+    public void onErrorLoad(Throwable error) {
+        Log.e(this.getClass().getSimpleName(), error.getLocalizedMessage());
     }
-
 }

@@ -27,8 +27,9 @@ public class RedactionPresenterImp  implements RedactionPresenter{
     @SuppressWarnings("unchecked")
     @Override
     public Observable<Redaction> getDataRedaction() {
-        return (Observable<Redaction>) service
-                .getPreparedObservable(service.getApi().getNewsFromSource(view.bundleData(), BuildConfig.API_KEY), Redaction.class, false, false);
+        return (Observable<Redaction>) service.getPreparedObservable(service.getApi()
+                        .getNewsFromSource(view.bundleData(), BuildConfig.API_KEY),
+                        Redaction.class, false, false);
     }
 
     @Override

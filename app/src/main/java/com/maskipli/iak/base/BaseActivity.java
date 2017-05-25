@@ -50,6 +50,13 @@ public class BaseActivity extends AppCompatActivity{
         this.subscription = subscription;
     }
 
+    public void intentInto(Class activity, String stringExtra, String name) {
+        Intent intent = new Intent(this, activity);
+        intent.putExtra("data", stringExtra);
+        intent.putExtra("name", name);
+        startActivity(intent);
+    }
+
     public void intentInto(Class activity, String stringExtra) {
         Intent intent = new Intent(this, activity);
         intent.putExtra("data", stringExtra);
